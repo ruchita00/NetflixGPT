@@ -2,8 +2,21 @@ import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { BG_URL } from "../utils/constants";
 import { checkValidData } from "../utils/validate";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -16,25 +29,85 @@ const Login = () => {
   };
   const handleButtonClick = () => {
     //Validate the form data
-
-    console.log(email.current.value);
-    console.log(password.current.value);
-
-    const message = checkValidData(
-      email.current.value,
-      password.current.value,
-      name.current.value
-    );
+    const message = checkValidData(email.current.value, password.current.value);
     setErrorMessage(message);
+    if (message) return;
+    //create a new user
+    //sign in / sign up logic
+    if (!isSignInForm) {
+      //sign up logic
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL: "https://avatars.githubusercontent.com/u/56263059?v=4",
+          })
+            .then(() => {
+              // Profile updated!
+              const { uid, email, displayName, photoURL } = auth.currentUser;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  email: email,
+                  displayName: displayName,
+                  photoURL: photoURL,
+                })
+              );
+              navigate("/browse");
+              // ...
+            })
+            .catch((error) => {
+              // An error occurred
+              setErrorMessage(error.message);
+              // ...
+            });
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + "-" + errorMessage);
+        });
+    } else {
+      // sign in logic;
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+          navigate("/browse");
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + " " + errorMessage);
+        });
+    }
   };
+
   const onSubmit = (e) => {
     e.preventDefault();
   };
+
+  // npm install -g firebase-tools
+  // firebase login
+  // firebase init
+  // firebase deploy
+
   return (
     <div>
       <Header />
       <div className="absolute">
-        <img className="h-[100%] w-[100%]" src={BG_URL} alt="netflix-logo" />
+        <img className="h-[100vh] w-[100vw]" src={BG_URL} alt="netflix-logo" />
       </div>
       <form
         onSubmit={onSubmit}
@@ -45,7 +118,6 @@ const Login = () => {
         </h1>{" "}
         {!isSignInForm && (
           <input
-            ref={name}
             type="text"
             placeholder="Full Name"
             className="w-full my-4 p-4 bg-gray-700"
