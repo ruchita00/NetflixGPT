@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import Header from "./Header";
-import { BG_URL } from "../utils/constants";
+import { BG_URL, USER_AVATAR } from "../utils/constants";
 import { checkValidData } from "../utils/validate";
 import {
   getAuth,
@@ -9,12 +9,10 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 
 const Login = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [isSignInForm, setIsSignInForm] = useState(true);
@@ -28,14 +26,10 @@ const Login = () => {
     setIsSignInForm(!isSignInForm);
   };
   const handleButtonClick = () => {
-    //Validate the form data
     const message = checkValidData(email.current.value, password.current.value);
     setErrorMessage(message);
     if (message) return;
-    //create a new user
-    //sign in / sign up logic
     if (!isSignInForm) {
-      //sign up logic
       createUserWithEmailAndPassword(
         auth,
         email.current.value,
@@ -45,10 +39,9 @@ const Login = () => {
           const user = userCredential.user;
           updateProfile(user, {
             displayName: name.current.value,
-            photoURL: "https://avatars.githubusercontent.com/u/56263059?v=4",
+            photoURL: USER_AVATAR,
           })
             .then(() => {
-              // Profile updated!
               const { uid, email, displayName, photoURL } = auth.currentUser;
               dispatch(
                 addUser({
@@ -58,13 +51,9 @@ const Login = () => {
                   photoURL: photoURL,
                 })
               );
-              navigate("/browse");
-              // ...
             })
             .catch((error) => {
-              // An error occurred
               setErrorMessage(error.message);
-              // ...
             });
         })
         .catch((error) => {
@@ -82,9 +71,6 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user);
-          navigate("/browse");
-          // ...
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -107,11 +93,11 @@ const Login = () => {
     <div>
       <Header />
       <div className="absolute">
-        <img className="h-[100vh] w-[100vw]" src={BG_URL} alt="netflix-logo" />
+        <img className="h-full w-full" src={BG_URL} alt="netflix-logo" />
       </div>
       <form
         onSubmit={onSubmit}
-        className="w-5/12 absolute my-36 mx-auto text-white right-0 left-0 p-12 bg-black rounded-lg bg-opacity-80"
+        className="w-3/12 absolute my-36 mx-auto text-white right-0 left-0 p-12 bg-black rounded-lg bg-opacity-80"
       >
         <h1 className="font-bold text-3xl py-4">
           {isSignInForm ? "Sign In" : "Sign Up"}

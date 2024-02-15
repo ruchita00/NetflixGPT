@@ -8,9 +8,15 @@ export const API_OPTIONS = {
   method: "GET",
   headers: {
     accept: "application/json",
-    Authorization: "Bearer " + process.env.REACT_APP_TMDB_KEY,
+    Authorization:
+      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmOGVlMGMzNjQ5Y2Y2MGY0OTJkZGZlMmEzNTlhMjM5OCIsInN1YiI6IjY1NjMzMDFiYjIzNGI5MDEzOTI4MGEzZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nCwDCLuK3qPLswAbkMTUspgqPkARWW1ARjCROuva2o4",
   },
 };
+
+// curl --request GET \
+//      --url 'https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1' \
+//      --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmOGVlMGMzNjQ5Y2Y2MGY0OTJkZGZlMmEzNTlhMjM5OCIsInN1YiI6IjY1NjMzMDFiYjIzNGI5MDEzOTI4MGEzZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nCwDCLuK3qPLswAbkMTUspgqPkARWW1ARjCROuva2o4' \
+//      --header 'accept: application/json'
 
 export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w500";
 
