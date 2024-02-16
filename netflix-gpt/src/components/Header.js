@@ -12,9 +12,10 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
+  console.log("user", user);
+
   const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
   const handleSignOut = () => {
-    const auth = getAuth();
     signOut(auth)
       .then(() => {})
       .catch((error) => {
@@ -62,7 +63,7 @@ const Header = () => {
       {" "}
       <img className="w-44 mx-auto md:mx-0" src={LOGO} alt="logo" />
       {user && (
-        <div className="flex p-2">
+        <div className="flex p-2 justify-between">
           {showGptSearch && (
             <select
               className="p-2 m-2 bg-gray-900 text-white"

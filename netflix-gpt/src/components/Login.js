@@ -22,13 +22,11 @@ const Login = () => {
   const password = useRef(null);
   const name = useRef(null);
 
-  const toggleSignInForm = () => {
-    setIsSignInForm(!isSignInForm);
-  };
   const handleButtonClick = () => {
     const message = checkValidData(email.current.value, password.current.value);
     setErrorMessage(message);
     if (message) return;
+
     if (!isSignInForm) {
       createUserWithEmailAndPassword(
         auth,
@@ -43,6 +41,7 @@ const Login = () => {
           })
             .then(() => {
               const { uid, email, displayName, photoURL } = auth.currentUser;
+              console.log(uid, email, photoURL, displayName);
               dispatch(
                 addUser({
                   uid: uid,
@@ -71,6 +70,7 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
+          console.log(user);
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -80,8 +80,8 @@ const Login = () => {
     }
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const toggleSignInForm = () => {
+    setIsSignInForm(!isSignInForm);
   };
 
   // npm install -g firebase-tools
@@ -96,8 +96,8 @@ const Login = () => {
         <img className="h-full w-full" src={BG_URL} alt="netflix-logo" />
       </div>
       <form
-        onSubmit={onSubmit}
-        className="w-3/12 absolute my-36 mx-auto text-white right-0 left-0 p-12 bg-black rounded-lg bg-opacity-80"
+        onSubmit={(e) => e.preventDefault()}
+        className="w-full md:w-3/12 absolute my-36 mx-auto text-white right-0 left-0 p-12 bg-black rounded-lg bg-opacity-80"
       >
         <h1 className="font-bold text-3xl py-4">
           {isSignInForm ? "Sign In" : "Sign Up"}
@@ -128,7 +128,7 @@ const Login = () => {
         >
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
-        <p className="py-4" onClick={toggleSignInForm}>
+        <p className="py-4 cursor-pointer" onClick={toggleSignInForm}>
           {isSignInForm
             ? "New to Netflix? Sign Up Now."
             : "Already registered? Sign in Now."}

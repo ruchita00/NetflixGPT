@@ -8,15 +8,9 @@ export const API_OPTIONS = {
   method: "GET",
   headers: {
     accept: "application/json",
-    Authorization:
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmOGVlMGMzNjQ5Y2Y2MGY0OTJkZGZlMmEzNTlhMjM5OCIsInN1YiI6IjY1NjMzMDFiYjIzNGI5MDEzOTI4MGEzZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nCwDCLuK3qPLswAbkMTUspgqPkARWW1ARjCROuva2o4",
+    Authorization: "Bearer " + process.env.REACT_APP_TMDB_KEY,
   },
 };
-
-// curl --request GET \
-//      --url 'https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1' \
-//      --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmOGVlMGMzNjQ5Y2Y2MGY0OTJkZGZlMmEzNTlhMjM5OCIsInN1YiI6IjY1NjMzMDFiYjIzNGI5MDEzOTI4MGEzZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nCwDCLuK3qPLswAbkMTUspgqPkARWW1ARjCROuva2o4' \
-//      --header 'accept: application/json'
 
 export const IMG_CDN_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -29,4 +23,4 @@ export const SUPPORTED_LANGUAGES = [
   { identifier: "spanish", name: "Spanish" },
 ];
 
-export const OPENAI_KEY = process.env.REACT_APP_OPENAI_KEY;
+export const OPENAI_KEY = "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";
